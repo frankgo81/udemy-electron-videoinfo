@@ -11,9 +11,37 @@
 video info
 
 </h1>
+<h2 id="result"></h2>
 <form action="">
-  <div><label for="">select a video</label></div>
+  <div><label for="">select a video</label>
+  <input accept="video/*" type="file"/>
+  </div>
+  <button type="submit">submit video</button>
 </form>
+
+
+<script type="text/javascript">
+  const electron = require("electron");
+  const {ipcRenderer} = electron;
+
+
+  document.querySelector('form').addEventListener('submit',(event)=>{
+   event.preventDefault();
+
+  const {path}= document.querySelector('input').files[0];
+  //console.log(file);
+  //debugger;
+   ipcRenderer.send('video:submit',path);
+
+
+  })
+
+  ipcRenderer.on("video:metadata", (event, duration)=>{
+    //console.log(event)
+    document.querySelector("#result").innerHTML = `duration is ${duration}`;
+  })
+
+</script>
 
 </body>
 </html>
